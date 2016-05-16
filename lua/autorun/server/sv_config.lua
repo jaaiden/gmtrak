@@ -10,7 +10,7 @@
 GMTrak = {}
 GMTrak.Config = {}
 
-GMTrak.Config.Version = "1.0"
+GMTrak.Config.Version = "1.1"
 -- GMTrak Version. Please do not change this. It is used to check your current version against
 -- the latest version available.
 

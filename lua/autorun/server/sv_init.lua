@@ -15,7 +15,7 @@ end
 
 function CheckVersion(newversion)
   if GMTrak.Config.Version ~= tostring(newversion) then
-    print('[GMTrak] You are not running the latest version of GMTrak (' .. tostring(newversion) .. ')!')
+    print('[GMTrak] You are not running the latest version of GMTrak!')
     print('[GMTrak] Go to https://gmtrak.com/download to get it!')
   end
 end
@@ -37,5 +37,5 @@ end
 -- end)
 
 print('[GMTrak] v' .. GMTrak.Config.Version .. ' Loaded!')
-GetLatestVersion(CheckVersion)
+//GetLatestVersion(CheckVersion)
 ValidateConfig()

@@ -1,7 +1,7 @@
 "AddonInfo"
 {
 	"name"				"GMTrak"
-	"version"			"1.0"
+	"version"			"1.1"
 	"up_date"			"05/16/2016"
 	"author_name"			"digital"
 	"author_email"			""
