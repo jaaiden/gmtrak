@@ -2,32 +2,34 @@ include('autorun/server/sv_config.lua')
 include('autorun/server/sv_functions.lua')
 include('autorun/server/sv_pluginloader.lua')
 
-function GetLatestVersion()
-  local ver = GMTrak.Config.Version
-  http.Fetch('https://gmtrak.com/latest-version',
+function GetLatestVersion(callback)
+  http.Fetch('https://gmtrak.com/api/latest-version',
     function(body, len, headers, code)
-      ver = body
+      callback(body)
     end,
 
     function(err)
     end
   )
-
-  return ver
 end
 
-function CheckVersion()
-  if tonumber(GMTrak.Config.Version, 10) < tonumber(GetLatestVersion(), 10) then
-    print('[GMTrak] There is a new update available to GMTrak!')
+function CheckVersion(newversion)
+  if GMTrak.Config.Version ~= tostring(newversion) then
+    print('[GMTrak] You are not running the latest version of GMTrak (' .. tostring(newversion) .. ')!')
     print('[GMTrak] Go to https://gmtrak.com/download to get it!')
   end
 end
 
 function ValidateConfig()
-  local configData = {}
-  configData["serverkey"] = GMTrak.Config.ServerKey
+  http.Post('https://gmtrak.com/api/validate-server/' .. GMTrak.Config.ServerKey, nil,
+    function(resp, len, headers, code)
+      print("[GMTrak] Server validated!")
+    end,
 
-  http.Post('https://gmtrak.com/validate-version', {}, function() print("[GMTrak] Server validated!") end, function(err) print('[GMTrak] Error validating this server: ' .. err) end)
+    function(err)
+      print('[GMTrak] Error validating this server: ' .. err)
+    end
+  )
 end
 
 -- hook.Add('InitPostEntity', 'IB_Startup', function()
@@ -35,5 +37,5 @@ end
 -- end)
 
 print('[GMTrak] v' .. GMTrak.Config.Version .. ' Loaded!')
-CheckVersion()
+GetLatestVersion(CheckVersion)
 ValidateConfig()

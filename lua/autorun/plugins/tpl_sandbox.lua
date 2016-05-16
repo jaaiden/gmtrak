@@ -11,11 +11,27 @@ include("autorun/server/sv_functions.lua")
 -- Include the functions file, needed to
 -- actually allow this file to work.
 
-hook.Add("PlayerAuthed", "GMTrak_SandboxPlugin_ConnectHook", function(ply, steamid, uniqueid)
-  print("[GMTrack-Sandbox] " .. ply:Nick() .. " connected!")
-  PostWebData(steamid, "PlayerAuthed")
+hook.Add("EntityTakeDamage", "GMTrak_sandbox_EntityTakeDamage", function(ent, inflictor, attacker, amount, dmginfo)
+  if ent:IsPlayer() then
+    PostWebData(ent:SteamID64(), "EntityTakeDamage", tonumber(amount), nil)
+  end
 end)
 
-hook.Add("PlayerSpawn", "GMTrak_SandboxPlugin_PlayerSpawnHook", function(ply)
-  PostWebData(ply:SteamID(), "PlayerSpawn")
+
+hook.Add("PlayerAuthed", "GMTrak_sandbox_PlayerAuthed", function(ply, steamid, uniqueid)
+  PostWebData(ply:SteamID64(), "PlayerAuthed", 1, nil)
+end)
+
+hook.Add("PlayerSpawn", "GMTrak_sandbox_PlayerSpawn", function(ply)
+  PostWebData(ply:SteamID64(), "PlayerSpawn", 1, nil)
+end)
+
+hook.Add("PlayerSpray", "GMTrak_sandbox_PlayerSpray", function(ply)
+  PostWebData(ply:SteamID64(), "PlayerSpray", 1, nil)
+end)
+
+hook.Add("OnNPCKilled", "GMTrak_sandbox_OnNPCKilled", function(vic, klr, wep)
+  if klr:IsPlayer() then
+    PostWebData(klr:SteamID64(), "OnNPCKilled", 1, nil)
+  end
 end)
